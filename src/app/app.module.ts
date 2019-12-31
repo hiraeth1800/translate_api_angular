@@ -10,17 +10,21 @@ import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import { HomeComponent } from './components/home/home.component';
 import { EditComponent } from './components/edit/edit.component';
 import {FormsModule} from '@angular/forms';
+import { LanguagesComponent } from './components/languages/languages.component';
+import { KeysComponent } from './components/keys/keys.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'http://localhost:8080/api/language/', '');
+  return new TranslateHttpLoader(http, 'http://localhost:8080/api/languages/', '');
 }
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    EditComponent
+    EditComponent,
+    LanguagesComponent,
+    KeysComponent
   ],
   imports: [
     BrowserModule,

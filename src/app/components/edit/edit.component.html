@@ -3,12 +3,13 @@
     <h5>{{ 'LANGUAGE' | translate }}: {{ locale }}</h5>
   </div>
   <div class="container" style="height: 100%;">
-    <div class="row" *ngFor="let translation of translations">
-      <div class="col-3 col-md-4 col-xl-5 text-right">
+    <div class="row" *ngFor="let translation of translations" style="padding: 4px 0;">
+      <div class="col-3 col-md-4 col-xl-5" style="display: flex; align-items: center; justify-content: flex-end;">
         {{ translation.key }}
       </div>
-      <div class="col-7 col-md-6 col-xl-5">
-        {{ translation.translation }}
+      <div class="form-group col-7 col-md-6 col-xl-5">
+        <input mdbInput type="text" class="form-control" placeholder="Value" [(ngModel)]="translation.translation"
+               (keyup)="updateTranslation(translation.key, $event)">
       </div>
       <div class="col-2 text-center" style="color: red; font-weight: bold; cursor: pointer;"
         (click)="deleteTranslation(translation)">

@@ -12,17 +12,19 @@ export class EditComponent implements OnInit {
   new: { locale: string, key: string; translation: string };
 
   constructor(private translationAPIService: TranslationAPIService) {
-  }
-
-  ngOnInit() {
     this.locale = 'en';
+    this.translations = [];
+    this.new = { locale: this.locale, key: '', translation: ''};
     this.translationAPIService.getCurrentLanguage().subscribe(locale => {
+      console.log('updated locale: ' + locale);
       this.locale = locale;
       this.getLanguage();
     });
-    this.translations = [];
-    this.new = { locale: this.locale, key: '', translation: ''};
     this.getLanguage();
+  }
+
+  ngOnInit() {
+
   }
 
   getLanguage() {
@@ -40,21 +42,30 @@ export class EditComponent implements OnInit {
   }
 
   addTranslation() {
+    this.new.locale = this.locale;
     this.translationAPIService.addTranslation(this.new).subscribe(res => {
       console.log(res);
-      this.translations.push({ key: this.new.key, translation: this.new.translation});
+      this.translations.push({ key: this.new.key.toUpperCase(), translation: this.new.translation});
       this.new = { locale: this.locale, key: '', translation: ''};
     });
   }
 
   deleteTranslation(translation: { key: string; translation: string }) {
-    this.translationAPIService.deleteTranslation({ locale: this.locale, key: translation.key, translation: translation.translation })
+    this.translationAPIService.deleteTranslation({ locale: this.locale, key: translation.key })
       .subscribe(res => {
         this.translations = this.translations.filter(t => {
           return t.key !== translation.key;
         });
       }
     );
+  }
+
+  updateTranslation(key: string, event) {
+    this.translationAPIService.updateTranslation({locale: this.locale, key, translation: event.target.value})
+      .subscribe(updatedTranslation => {
+        // this.translations = this.translations.filter(t => t.key !== updatedTranslation.key);
+        // this.translations.push({key: updatedTranslation.key, translation: updatedTranslation.translation});
+    });
   }
 
 }
