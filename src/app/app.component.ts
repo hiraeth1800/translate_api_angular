@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
     this.translate.use(locale);
     this.translationAPIService.updateLanguage(locale);
     this.translate.getTranslation('en').subscribe(res => {
-      console.log(Object.keys(res));
+      // console.log(Object.keys(res));
     });
   }
 }

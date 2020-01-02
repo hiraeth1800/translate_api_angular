@@ -44,7 +44,6 @@ export class EditComponent implements OnInit {
   addTranslation() {
     this.new.locale = this.locale;
     this.translationAPIService.addTranslation(this.new).subscribe(res => {
-      console.log(res);
       this.translations.push({ key: this.new.key.toUpperCase(), translation: this.new.translation});
       this.new = { locale: this.locale, key: '', translation: ''};
     });

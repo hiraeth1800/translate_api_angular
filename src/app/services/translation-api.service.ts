@@ -66,6 +66,10 @@ export class TranslationAPIService {
     return this.http.post<string[]>(this.keysUrl + '/update', {});
   }
 
+  addKey(newKey: string): Observable<object> {
+    return this.http.post(this.keysUrl + '/add', newKey);
+  }
+
   deleteKey(key: string): Observable<object> {
     return this.http.post(this.keysUrl + '/delete/' + key, {});
   }
