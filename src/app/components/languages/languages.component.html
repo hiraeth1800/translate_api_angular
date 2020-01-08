@@ -1,0 +1,28 @@
+<div style="height: 100%;">
+  <div style="display: flex; justify-content: center; padding: 32px;">
+    <h5>{{ 'LANGUAGES' | translate }}</h5>
+  </div>
+  <div class="container" style="height: 100%;">
+    <div class="row" *ngFor="let language of languages" style="padding: 4px 0;">
+      <div class="col-6 text-right">
+        {{ language }}
+      </div>
+      <div class="col-6" style="color: red; font-weight: bold; cursor: pointer;"
+      (click)="deleteLanguage(language)">
+        X
+      </div>
+    </div>
+    <div class="row" style="padding: 4px 0;">
+      <div class="form-group col-6">
+        <input mdbInput type="text" class="form-control" id="value" placeholder="Value" [(ngModel)]="new">
+      </div>
+      <div class="col-2" style="display: flex; justify-content: center;">
+        <button type="button" mdbBtn color="primary" mdbWavesEffect
+                (click)="addLanguage()"
+                [disabled]="new === ''">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

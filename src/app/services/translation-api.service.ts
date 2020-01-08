@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TranslationAPIService {
 
-  private localeObservable: Subject<string>;
+  private localeObservable: BehaviorSubject<string>;
+  // private languagesUpdatedObservable: Subject<boolean>;
 
   private languagesUrl = 'http://localhost:8080/api/languages';
   private translationsUrl = 'http://localhost:8080/api/translations';
   private keysUrl = 'http://localhost:8080/api/keys';
+  private uploadUrl = 'http://localhost:8080/api/upload';
 
   constructor(private http: HttpClient) {
-    this.localeObservable = new Subject();
+    this.localeObservable = new BehaviorSubject<string>('en');
+    // this.languagesUpdatedObservable = new Subject();
   }
 
   getLanguages(): Observable<string[]> {
@@ -78,7 +81,19 @@ export class TranslationAPIService {
     this.localeObservable.next(locale);
   }
 
-  getCurrentLanguage(): Observable<string> {
+  getCurrentLanguageObservable(): Observable<string> {
     return this.localeObservable.asObservable();
+  }
+
+  /*setLanguagesUpdated(x: boolean) {
+    this.languagesUpdatedObservable.next(x);
+  }
+
+  updateLanguages(): Observable<boolean> {
+    return this.languagesUpdatedObservable.asObservable();
+  }*/
+
+  upload(formData: FormData) {
+    return this.http.post(this.uploadUrl + '/csv', formData, {reportProgress: true, observe: 'events'});
   }
 }

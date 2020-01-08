@@ -1,0 +1,49 @@
+<div class="container" style="display: flex; flex-direction: column; align-items: center; padding-top: 16px;">
+  <h5>{{ 'KEYS' | translate }}</h5>
+  <div *ngFor="let key of allKeys" style="display: flex;">
+    {{ key }}
+    <div style="color: red; font-weight: bold; padding: 0 8px; cursor: pointer;" (click)="deleteKey(key)">X</div>
+  </div>
+  <div style="display: flex; align-items: center;">
+    <div class="form-group col-6 text-right" style="margin: 0;">
+      <input mdbInput type="text" class="form-control" id="key" placeholder="KEY" [(ngModel)]="new">
+    </div>
+      <button type="button" mdbBtn color="primary" mdbWavesEffect
+              (click)="addKey()"
+              [disabled]="new === ''">
+        Add
+      </button>
+  </div>
+</div>
+<hr/>
+<div class="container" style="display: flex; flex-direction: column; align-items: center; padding-top: 16px;">
+  <div *ngFor="let x of keysPerLocale" style="display: flex; flex-direction: column; align-items: center; padding-top: 16px;">
+    <h5>{{ x.locale | uppercase }}</h5>
+    <div *ngFor="let key of x.keys">
+      {{ key }}
+    </div>
+    <hr/>
+  </div>
+</div>
+<hr/>
+<div *ngIf="(missingKeys | json) !== '{}'" class="container" style="display: flex; flex-direction: column; align-items: center; padding-top: 16px;">
+  <div style="display: flex; align-items: center">
+    <h4>{{ 'MISSING_KEYS' | translate }}</h4>
+    <button type="button" size="sm" mdbBtn color="primary" mdbWavesEffect (click)="updateAllKeys()">
+      <i class="fas fa-redo-alt"></i>
+    </button>
+  </div>
+  <div *ngFor="let item of missingKeys | keyvalue" style="display: flex; flex-direction: column; align-items: center; padding-top: 16px;">
+    <div style="display: flex; align-items: center;">
+      <h5>{{ item.key | uppercase }}</h5>
+      <button type="button" size="sm" mdbBtn color="primary" mdbWavesEffect (click)="updateKeys(item.key)">
+        <i class="fas fa-redo-alt"></i>
+      </button>
+    </div>
+    <div *ngFor="let key of item.value">
+      {{ key }}
+    </div>
+    <hr/>
+  </div>
+</div>
+

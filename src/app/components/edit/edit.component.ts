@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TranslationAPIService} from '../../services/translation-api.service';
+import {HttpEventType} from '@angular/common/http';
 
 @Component({
   selector: 'app-edit',
@@ -7,24 +8,27 @@ import {TranslationAPIService} from '../../services/translation-api.service';
   styleUrls: ['./edit.component.scss']
 })
 export class EditComponent implements OnInit {
+  selectedFileName: string;
+  selectedFile: File;
+  progress: number;
   locale: string;
   translations: { key: string; translation: string }[];
   new: { locale: string, key: string; translation: string };
 
   constructor(private translationAPIService: TranslationAPIService) {
-    this.locale = 'en';
-    this.translations = [];
-    this.new = { locale: this.locale, key: '', translation: ''};
-    this.translationAPIService.getCurrentLanguage().subscribe(locale => {
-      console.log('updated locale: ' + locale);
-      this.locale = locale;
-      this.getLanguage();
-    });
-    this.getLanguage();
   }
 
   ngOnInit() {
-
+    this.selectedFileName = '';
+    this.selectedFile = null;
+    this.progress = 0;
+    this.translations = [];
+    this.new = { locale: '', key: '', translation: ''};
+    this.translationAPIService.getCurrentLanguageObservable().subscribe(locale => {
+      this.locale = locale;
+      this.new.locale = locale;
+      this.getLanguage();
+    });
   }
 
   getLanguage() {
@@ -67,4 +71,22 @@ export class EditComponent implements OnInit {
     });
   }
 
+  onUpload() {
+    this.progress = 0;
+    const fd = new FormData();
+    fd.append('file', this.selectedFile, this.selectedFileName);
+    this.translationAPIService.upload(fd).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        console.log(event);
+        this.progress = Math.round(event.loaded / event.total * 100);
+      } else if (event.type === HttpEventType.Response) {
+        console.log(event);
+      }
+    });
+  }
+
+  onFileSelected(event) {
+    this.selectedFile = event.target.files[0] as File;
+    this.selectedFileName = this.selectedFile.name;
+  }
 }

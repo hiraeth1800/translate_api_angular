@@ -15,10 +15,16 @@ export class AppComponent implements OnInit {
   constructor(private translate: TranslateService, private translationAPIService: TranslationAPIService) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang('en');
-    translationAPIService.updateLanguage('en');
   }
 
   ngOnInit(): void {
+    this.getLocales();
+    /*this.translationAPIService.updateLanguages().subscribe(x => {
+      this.getLocales();
+    });*/
+  }
+
+  getLocales() {
     this.translationAPIService.getLanguages().subscribe(res => {
       this.locales = res;
     });
